@@ -1,30 +1,41 @@
 <script setup lang="ts">
+import { ref, reactive } from 'vue'
 import CitySearch from './components/CitySearch.vue'
 import MovieCard from './components/MovieCard.vue'
+import ProgressSpinner from 'primevue/progressspinner'
+import Message from 'primevue/message'
+import { getRecommendations } from './services/api'
 
-const movies = [
-  {
-    title: "Inception",
-    overview: "Dom Cobb est un voleur expérimenté dans l'art périlleux de l'extraction...",
-    posterUrl: "https://image.tmdb.org/t/p/w500/9gk7adHYeDvHkCSEqAvQNLV5Uge.jpg",
-    rating: 4.5
-  },
-  {
-    title: "The Matrix",
-    overview: "Programmeur anonyme, Thomas Anderson est aussi l'un des pirates les plus recherchés...",
-    posterUrl: "https://image.tmdb.org/t/p/w500/hEpWvX6Bp79eLxY1K2FxRcj0xKC.jpg",
-    rating: 4.8
-  },
-  {
-    title: "Interstellar",
-    overview: "Dans un futur proche, la Terre est devenue hostile pour l'homme...",
-    posterUrl: "https://image.tmdb.org/t/p/w500/gEU2QniE6E77NI6lCU6MxlNBvIx.jpg",
-    rating: 4.7
+const state = reactive({
+  loading: false,
+  error: null as string | null,
+  weather: null as string | null,
+  mood: null as string | null,
+  movies: [] as any[]
+})
+
+const handleSearch = async (city: string) => {
+  state.loading = true
+  state.error = null
+  
+  console.log('Tentative d\'appel API pour la ville:', city)
+  try {
+    const data = await getRecommendations(city)
+    console.log('Réponse API:', data)
+    state.weather = data.weather
+    state.mood = data.mood
+    state.movies = data.movies.map(movie => ({
+      title: movie.title,
+      overview: movie.overview,
+      posterUrl: `https://image.tmdb.org/t/p/w500${movie.poster_path}`,
+      rating: movie.vote_average / 2 // Convert to 5-star rating
+    }))
+  } catch (error) {
+    console.error('Erreur détaillée:', error)
+    state.error = "Impossible de charger les recommandations"
+  } finally {
+    state.loading = false
   }
-]
-
-const handleSearch = (city: string) => {
-  console.log('Recherche pour la ville:', city)
 }
 </script>
 
@@ -37,9 +48,22 @@ const handleSearch = (city: string) => {
       
       <CitySearch @search="handleSearch" />
       
+      <div v-if="state.loading" class="flex justify-center my-8">
+        <ProgressSpinner />
+      </div>
+      
+      <Message v-if="state.error" severity="error" :closable="false" class="mb-4">
+        {{ state.error }}
+      </Message>
+      
+      <div v-if="state.weather && state.mood" class="text-center mb-8">
+        <h2 class="text-2xl mb-2">{{ state.weather }}</h2>
+        <p class="text-gray-600">Ambiance : {{ state.mood }}</p>
+      </div>
+      
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 justify-items-center">
         <MovieCard
-          v-for="movie in movies"
+          v-for="movie in state.movies"
           :key="movie.title"
           :movie="movie"
         />
