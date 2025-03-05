@@ -1,7 +1,5 @@
 <script setup lang="ts">
-import Card from 'primevue/card'
-import Button from 'primevue/button'
-import { computed, ref, onMounted, watch } from 'vue'
+import { ref, onMounted, watch } from 'vue'
 import Rating from 'primevue/rating'
 import MovieDetailsDialog from './MovieDetailsDialog.vue'
 
@@ -35,12 +33,6 @@ watch(dialogVisible, (newValue) => {
 })
 
 const emit = defineEmits(['click'])
-
-const ratingColor = computed(() => {
-  if (props.movie.rating >= 4) return 'text-green-500'
-  if (props.movie.rating >= 3) return 'text-yellow-500'
-  return 'text-red-500'
-})
 </script>
 
 <template>

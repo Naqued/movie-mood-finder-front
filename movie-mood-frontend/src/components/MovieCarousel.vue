@@ -26,10 +26,6 @@ onMounted(() => {
 
 const hoveredIndex = ref<number | null>(null)
 
-const handleSlideClick = (movie: any) => {
-  console.log('Slide clicked for movie:', movie.title)
-}
-
 // Group movies into rows
 const movieRows = computed(() => {
   const rows = []

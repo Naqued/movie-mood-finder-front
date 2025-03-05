@@ -33,10 +33,6 @@ const buttonClasses = computed(() => `
   ${props.isInitial ? 'h-14 md:h-16' : ' h-10 md:h-11'}
 `)
 
-const iconClasses = computed(() => `
-  pi pi-map-marker absolute top-1/2 -translate-y-1/2 text-white/40
-  ${props.isInitial ? 'text-xl md:text-2xl left-4 md:left-5' : 'text-lg md:text-xl left-3 md:left-4'}
-`)
 </script>
 
 <template>

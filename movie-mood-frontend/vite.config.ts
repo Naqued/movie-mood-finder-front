@@ -12,5 +12,16 @@ export default defineConfig({
   },
   css: {
     devSourcemap: true
+  },
+  preview: {
+    host: '0.0.0.0',
+    port: 3048,
+    strictPort: true,
+    allowedHosts: ['mmf.omdev.tech', 'api.mmf.omdev.tech', 'localhost']
+  },
+  server: {
+    host: '0.0.0.0',
+    port: 3048,
+    strictPort: true
   }
 })

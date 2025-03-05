@@ -1,11 +1,10 @@
 <script setup lang="ts">
-import { ref, reactive } from 'vue'
+import { reactive } from 'vue'
 import CitySearch from './components/CitySearch.vue'
 import MovieCarousel from './components/MovieCarousel.vue'
 import ProgressSpinner from 'primevue/progressspinner'
 import Message from 'primevue/message'
 import { getRecommendations } from './services/api'
-import { TransitionGroup } from 'vue'
 import backgroundImage from './assets/background.png'
 
 const state = reactive({
